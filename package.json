@@ -1,0 +1,28 @@
+{
+  "name": "cli-hangman",
+  "version": "1.0.0",
+  "description": "\"A command-line (CLI) Hangman game built with Node.js.\"",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cm3z4/CLI-Hangman.git"
+  },
+  "keywords": [
+    "Node.js",
+    "CLI",
+    "Hangman"
+  ],
+  "author": "cm3z4",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cm3z4/CLI-Hangman/issues"
+  },
+  "homepage": "https://github.com/cm3z4/CLI-Hangman#readme",
+  "dependencies": {
+    "prompt": "^1.0.0",
+    "random-words": "^1.1.0"
+  }
+}
