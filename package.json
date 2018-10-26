@@ -22,6 +22,8 @@
   },
   "homepage": "https://github.com/cm3z4/CLI-Hangman#readme",
   "dependencies": {
+    "figlet": "^1.2.1",
+    "lolcatjs": "^2.3.2",
     "prompt": "^1.0.0",
     "random-words": "^1.1.0"
   }
