@@ -5,12 +5,21 @@ const lolcatjs = require('lolcatjs');
 
 var guessesLeft = 9;
 var winningArray = [];
+var usedLetters = [];
 
 // Generate and return a random word.
 function genRandWord() {
-    let randWord = randomWords();
-    winningArray = randWord.split("");
-    return randWord;
+    let randWord = randomWords({ exactly: 1, maxLength: 10 });
+    winningArray = randWord[0].split("");
+    return randWord[0].split("");
+};
+
+function checkLetter(letter) {
+    if (usedLetters.includes(letter)) {
+        return true;
+    } else {
+        return false;
+    };
 };
 
 function checkWin() {
@@ -32,7 +41,7 @@ function CreateArrays(randWord) {
 
 };
 
-var start = new CreateArrays(genRandWord().split(""));
+var start = new CreateArrays(genRandWord());
 start.createPseudoArray();
 
 function userInput() {
@@ -47,47 +56,66 @@ function userInput() {
 
         if (guessesLeft > 0) {
 
-            if (start.randomWordArray.includes(result.char)) {
-                console.log("Testing");
-                for (var i = 0; i < start.randomWordArray.length; i++) {
+            if (result.char.length === 1) {
+
+                if (checkLetter(result.char) === true) {
+                    lolcatjs.fromString("\nYou already tried that letter!");
+                    console.log("\nGuesses left: " + guessesLeft);
+                    lolcatjs.fromString("\n" + start.pseudoWordArray.join(" ") + "\n");
+                    userInput();
+                } else {
 
                     if (start.randomWordArray.includes(result.char)) {
-                        var element = start.randomWordArray.indexOf(result.char);
-                        //console.log(element);
-                        start.pseudoWordArray[element] = start.pseudoWordArray[element].replace("_", result.char);
-                        start.randomWordArray[element] = start.randomWordArray[element].replace(result.char, "*");
-                    };
-                };
-                console.log("\n" + result.char + " is a correct letter!");
-                lolcatjs.fromString("\n" + start.pseudoWordArray.join(" ") + "\n");
-                //console.log("\n" + start.pseudoWordArray.join("") + "\n");
-                //console.log(winningArray.join(""));
-                if (checkWin()) {
 
-                    figlet("CONGRATS!", function (err, gameWon) {
-                        if (err) {
-                            console.log('Something went very wrong...');
-                            console.dir(err);
-                            return;
+                        for (var i = 0; i < start.randomWordArray.length; i++) {
+
+                            if (start.randomWordArray.includes(result.char)) {
+                                var element = start.randomWordArray.indexOf(result.char);
+                                //console.log(element);
+                                start.pseudoWordArray[element] = start.pseudoWordArray[element].replace("_", result.char);
+                                start.randomWordArray[element] = start.randomWordArray[element].replace(result.char, "*");
+                            };
                         };
-                        lolcatjs.fromString(gameWon);
-                        console.log("   You saved Node, you're a hero!\n");
-                        playAgain();
-                    });
-                } else {
-                    userInput();
+                        usedLetters.push(result.char);
+                        console.log("\n" + result.char + " is a correct letter!");
+                        console.log("\nGuesses left: " + guessesLeft);
+                        lolcatjs.fromString("\n" + start.pseudoWordArray.join(" ") + "\n");
+
+                        if (checkWin()) {
+
+                            figlet("CONGRATS!", function (err, gameWon) {
+                                if (err) {
+                                    console.log('Something went very wrong...');
+                                    console.dir(err);
+                                    return;
+                                };
+                                lolcatjs.fromString(gameWon);
+                                console.log("   You saved Node, you're a hero!\n");
+                                playAgain();
+                            });
+                        } else {
+                            userInput();
+                        };
+
+                    } else {
+
+                        console.log("\n" + result.char + " is not a correct letter!");
+                        console.log("\nGuesses left: " + guessesLeft);
+                        lolcatjs.fromString("\n" + start.pseudoWordArray.join(" ") + "\n");
+                        //console.log("\n" + start.pseudoWordArray.join("") + "\n");
+                        //console.log(winningArray.join(""));
+                        userInput();
+                    };
+
+                    guessesLeft--;
                 };
 
             } else {
-
-                console.log("\n" + result.char + " is not a correct letter!\n");
-                lolcatjs.fromString(start.pseudoWordArray.join(" ") + "\n");
-                //console.log("\n" + start.pseudoWordArray.join("") + "\n");
-                //console.log(winningArray.join(""));
+                lolcatjs.fromString("\nYou must only enter 1 letter!");
+                console.log("\nGuesses left: " + guessesLeft);
+                lolcatjs.fromString("\n" + start.pseudoWordArray.join(" ") + "\n");
                 userInput();
             };
-
-            guessesLeft--;
 
         } else {
 
@@ -135,7 +163,8 @@ function playAgain() {
         if (result.answer === "yes") {
             guessesLeft = 9;
             start.pseudoWordArray = [];
-            start = new CreateArrays(genRandWord().split(""));
+            usedLetters = [];
+            start = new CreateArrays(genRandWord());
             setTimeout(function () {
                 start.createPseudoArray();
                 userInput();
