@@ -29,6 +29,7 @@ function CreateArrays(randWord) {
                 console.log(winningArray.join(""));
             };
         };
+
 };
 
 var start = new CreateArrays(genRandWord().split(""));
@@ -40,14 +41,14 @@ function userInput() {
 
     prompt.get([{
         name: 'char',
-        description: 'Guess a letter',
+        description: 'Guess a letter ',
         type: 'string',
     }], function (err, result) {
 
         if (guessesLeft > 0) {
 
             if (start.randomWordArray.includes(result.char)) {
-
+                console.log("Testing");
                 for (var i = 0; i < start.randomWordArray.length; i++) {
 
                     if (start.randomWordArray.includes(result.char)) {
@@ -63,7 +64,7 @@ function userInput() {
                 //console.log(winningArray.join(""));
                 if (checkWin()) {
 
-                    figlet("VICTORY", function (err, gameWon) {
+                    figlet("CONGRATS!", function (err, gameWon) {
                         if (err) {
                             console.log('Something went very wrong...');
                             console.dir(err);
@@ -71,6 +72,7 @@ function userInput() {
                         };
                         lolcatjs.fromString(gameWon);
                         console.log("   You saved Node, you're a hero!\n");
+                        playAgain();
                     });
                 } else {
                     userInput();
@@ -97,6 +99,7 @@ function userInput() {
                 };
                 lolcatjs.fromString(gameOver);
                 console.log("   Node is dead, way to go...\n");
+                playAgain();
             });
         };
     });
@@ -116,3 +119,30 @@ setTimeout(function () {
     lolcatjs.fromString("\n" + start.pseudoWordArray.join(" ") + "\n");
     userInput();
 }, 750);
+
+function playAgain() {
+
+    lolcatjs.fromString("Would you like to play again?\n");
+
+    prompt.start();
+
+    prompt.get([{
+        name: 'answer',
+        description: 'yes/no ',
+        type: 'string',
+    }], function (err, result) {
+
+        if (result.answer === "yes") {
+            guessesLeft = 9;
+            start.pseudoWordArray = [];
+            start = new CreateArrays(genRandWord().split(""));
+            setTimeout(function () {
+                start.createPseudoArray();
+                userInput();
+            }, 500);
+
+        } else {
+            return;
+        };
+    });
+};
