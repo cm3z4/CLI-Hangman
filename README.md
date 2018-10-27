@@ -8,7 +8,7 @@ Directions:
 
 Note: Make sure you're in the project root directory. Then run the below commands.
 
-npm install
-node index.js
+1. npm install
+2. node index.js
 
 Enjoy!
